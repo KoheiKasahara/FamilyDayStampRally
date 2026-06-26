@@ -386,7 +386,7 @@ if __name__ == "__main__":
     import os, re
 
     # ▼▼▼ GitHub Pages 公開後、本番URLに書き換えてください（末尾スラッシュなし）▼▼▼
-    BASE_URL = "https://example.github.io/familyday-stamprally"
+    BASE_URL = "https://koheikasahara.github.io/FamilyDayStampRally"
     # ▲▲▲ 例: https://<ユーザー名>.github.io/<リポジトリ名> ▲▲▲
 
     HERE = os.path.dirname(os.path.abspath(__file__))
