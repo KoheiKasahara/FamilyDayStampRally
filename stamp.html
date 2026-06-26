@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="theme-color" content="#e8552d" />
+  <title>スタンプ取得</title>
+  <link rel="manifest" href="manifest.webmanifest" />
+  <link rel="icon" href="images/icon-192.png" />
+  <link rel="apple-touch-icon" href="images/icon-192.png" />
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+  <main class="wrap wrap--center">
+    <section class="card result" id="resultCard">
+      <div class="result__icon" id="resultIcon">⏳</div>
+      <h1 class="result__title" id="resultTitle">読み込み中…</h1>
+
+      <div class="result__stampwrap" id="stampWrap" hidden>
+        <img class="result__stamp" id="resultStamp" src="" alt="" />
+      </div>
+
+      <p class="result__msg" id="resultMsg"></p>
+
+      <div class="result__progress" id="resultProgress" hidden>
+        <span id="rCount">0</span> / <span id="rTotal">0</span> 個
+      </div>
+
+      <p class="result__status" id="resultStatus"></p>
+
+      <a class="btn" id="homeBtn" href="index.html">スタンプ一覧へ</a>
+    </section>
+  </main>
+
+  <script src="js/config.js"></script>
+  <script src="js/storage.js"></script>
+  <script src="js/stamp.js"></script>
+  <script>
+    if ("serviceWorker" in navigator) {
+      navigator.serviceWorker.register("sw.js").catch(function () {});
+    }
+  </script>
+</body>
+</html>
