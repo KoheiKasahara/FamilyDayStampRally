@@ -292,7 +292,7 @@ EC_BITS_M = 0b00  # level M
 def place_format(mat, mask):
     n = mat.size
     bits = bch_format((EC_BITS_M << 3) | mask)
-    arr = [(bits >> i) & 1 for i in range(15)]  # LSB first (arr[0]=bit0)
+    arr = [(bits >> (14 - i)) & 1 for i in range(15)]  # MSB first（実機スキャナ準拠）
     # copy 1 (around top-left)
     coords1 = [(8, 0), (8, 1), (8, 2), (8, 3), (8, 4), (8, 5), (8, 7), (8, 8),
                (7, 8), (5, 8), (4, 8), (3, 8), (2, 8), (1, 8), (0, 8)]
