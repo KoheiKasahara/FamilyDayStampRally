@@ -31,14 +31,15 @@
 │   ├─ qr-generator.html   … ブラウザ上でQRを生成・確認するツール
 │   ├─ qr-abtest.html      … QRの読み取り精度を比較する検証用ページ
 │   └─ qr/                 … 生成物の出力先（area-*.svg/png, print.html など）
-├─ tests/                  … 自動テスト（後述）
-│   ├─ config.test.js      … config.js の整合性テスト（Vitest）
-│   ├─ storage.test.js     … storage.js のテスト（Vitest）
+├─ tests/                  … 自動テスト（後述・追加インストール不要）
+│   ├─ config.test.js      … config.js の整合性テスト（node --test）
+│   ├─ storage.test.js     … storage.js のテスト（node --test）
+│   ├─ helpers/
+│   │   └─ load-app.js     … テスト用の読み込み補助（window/localStorage の最小実装）
 │   ├─ python/
-│   │   └─ test_generate_qr.py … generate_qr.py のテスト（pytest）
+│   │   └─ test_generate_qr.py … generate_qr.py のテスト（python -m unittest）
 │   └─ README.md           … テストの実行方法
-├─ package.json            … テスト用の設定（npm scripts / 開発依存）
-├─ vitest.config.js        … Vitest 設定（jsdom 環境）
+├─ package.json            … テスト実行用の npm scripts（依存パッケージなし）
 └─ README.md
 ```
 
@@ -154,12 +155,13 @@ http://localhost:8000/index.html?reset=1
 
 ## 7. 自動テスト
 
-ロジックの回帰を防ぐためのユニットテストを `tests/` に用意しています。詳細は
-`tests/README.md` を参照してください。
+ロジックの回帰を防ぐためのユニットテストを `tests/` に用意しています。
+**追加インストール不要**で、Node と Python の標準機能だけで実行できます。
+詳細は `tests/README.md` を参照してください。
 
 ```bash
-npm install && npm test                 # JS（storage.js / config.js）
-python -m pytest tests/python/ -q       # QR生成（generate_qr.py）
+npm test                                 # JS（storage.js / config.js）— Node 内蔵ランナー
+python -m unittest discover -s tests/python -v   # QR生成（generate_qr.py）— 標準unittest
 ```
 
 ---
