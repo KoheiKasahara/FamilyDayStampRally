@@ -25,8 +25,20 @@
 │   ├─ logo.png
 │   ├─ icon-192.png / icon-512.png
 │   └─ stamp-1.png … stamp-8.png
-├─ tools/
-│   └─ generate_qr.py      … 各エリアのQRコード生成スクリプト
+├─ tools/                  … QRコード生成ツール（公開には不要）
+│   ├─ generate_qr.py      … 各エリアのQRコード生成スクリプト（依存ライブラリ不要）
+│   ├─ generate_qr_lib.py  … qrcodeライブラリ版の生成スクリプト（代替）
+│   ├─ qr-generator.html   … ブラウザ上でQRを生成・確認するツール
+│   ├─ qr-abtest.html      … QRの読み取り精度を比較する検証用ページ
+│   └─ qr/                 … 生成物の出力先（area-*.svg/png, print.html など）
+├─ tests/                  … 自動テスト（後述）
+│   ├─ config.test.js      … config.js の整合性テスト（Vitest）
+│   ├─ storage.test.js     … storage.js のテスト（Vitest）
+│   ├─ python/
+│   │   └─ test_generate_qr.py … generate_qr.py のテスト（pytest）
+│   └─ README.md           … テストの実行方法
+├─ package.json            … テスト用の設定（npm scripts / 開発依存）
+├─ vitest.config.js        … Vitest 設定（jsdom 環境）
 └─ README.md
 ```
 
@@ -71,14 +83,16 @@
 
 GitHub Pages のURLが決まってから実行します。
 
-1. `tools/generate_qr.py` を開き、`BASE_URL` を本番URLに書き換える
-   例: `https://<ユーザー名>.github.io/<リポジトリ名>`（末尾スラッシュなし）
+1. `tools/generate_qr.py` の `BASE_URL` が本番URLになっているか確認する
+   （現在 `https://koheikasahara.github.io/FamilyDayStampRally` に設定済み。
+   公開先が変わる場合のみ書き換え。末尾スラッシュなし）
 2. 実行（Python が必要）:
    ```
    pip install qrcode pillow
    python tools/generate_qr.py
    ```
-3. `tools/qr/` に `area-A1.png …` と、印刷用の `print.html` が生成されます。
+3. `tools/qr/` に各エリアのQR画像（`area-A1.svg` / `area-A1.png` …）と、
+   印刷用の `print.html` が生成されます。
    `print.html` をブラウザで開いてA4印刷し、各エリアに掲示してください。
 
 QRの内容は `config.js` の `areas` から自動で読み込まれるので、
@@ -138,6 +152,18 @@ http://localhost:8000/index.html?reset=1
 
 ---
 
+## 7. 自動テスト
+
+ロジックの回帰を防ぐためのユニットテストを `tests/` に用意しています。詳細は
+`tests/README.md` を参照してください。
+
+```bash
+npm install && npm test                 # JS（storage.js / config.js）
+python -m pytest tests/python/ -q       # QR生成（generate_qr.py）
+```
+
+---
+
 ## 仕様まとめ
 
 - 初回アクセス時に参加者IDを自動生成（家族名・人数などの入力は不要）
@@ -145,4 +171,3 @@ http://localhost:8000/index.html?reset=1
 - 5個以上で「クリア！」、全部で「コンプリート！」表示
 - 景品交換は景品交換所でスタッフが画面を確認して対応（交換済み管理・集計・管理画面なし）
 - データはLocalStorageのみ。サーバー・DB・外部CDNは不使用
-```
